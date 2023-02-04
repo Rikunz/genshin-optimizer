@@ -1,4 +1,4 @@
-import { allCharacterKeys, CharacterKey } from "../../Types/consts";
+import { allCharacterKeys, CharacterKey } from "@genshin-optimizer/consts";
 import { deepFreeze } from "../../Util/Util";
 import { ArtCharDatabase } from "../Database";
 import { DataManager } from "../DataManager";

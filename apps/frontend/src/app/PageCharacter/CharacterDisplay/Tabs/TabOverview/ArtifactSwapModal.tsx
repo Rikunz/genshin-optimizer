@@ -14,7 +14,7 @@ import useMediaQueryUp from "../../../../ReactHooks/useMediaQueryUp"
 import { SlotKey } from "../../../../Types/consts"
 import { filterFunction } from "../../../../Util/SortByFilters"
 import CompareBuildButton from "./CompareBuildButton"
-const numToShowMap = { xs: 6, sm: 6, md: 9, lg: 12, xl: 12 }
+const numToShowMap = { xs: 2 * 3, sm: 2 * 3, md: 3 * 3, lg: 4 * 3, xl: 4 * 3 }
 
 const ArtifactFilterDisplay = lazy(() => import('../../../../Components/Artifact/ArtifactFilterDisplay'))
 

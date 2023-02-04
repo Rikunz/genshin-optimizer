@@ -30,13 +30,13 @@ export class DisplayArtifactEntry extends DataEntry<"display_artifact", "display
   constructor(database: ArtCharDatabase) {
     super(database, "display_artifact", initialState, "display_artifact")
   }
-  validate(obj: any): IDisplayArtifact | undefined {
+  validate(obj: unknown): IDisplayArtifact | undefined {
     if (typeof obj !== "object") return
-    let { filterOption, ascending, sortType, effFilter, probabilityFilter } = obj
+    let { filterOption, ascending, sortType, effFilter, probabilityFilter } = obj as IDisplayArtifact
 
     if (typeof filterOption !== "object") filterOption = initialFilterOption()
     else {
-      let { artSetKeys, rarity, levelLow, levelHigh, slotKeys, mainStatKeys, substats, locations, showEquipped, showInventory, exclusion, locked, rvLow, rvHigh, lines } = filterOption
+      let { artSetKeys, rarity, levelLow, levelHigh, slotKeys, mainStatKeys, substats, locations, showEquipped, showInventory, locked, rvLow, rvHigh, lines } = filterOption
       artSetKeys = validateArr(artSetKeys, allArtifactSets, [])
       rarity = validateArr(rarity, allArtifactRarities)
 
@@ -51,7 +51,6 @@ export class DisplayArtifactEntry extends DataEntry<"display_artifact", "display
       locations = validateArr(locations, locationCharacterKeys, [])
       if (typeof showEquipped !== "boolean") showEquipped = true
       if (typeof showInventory !== "boolean") showInventory = true
-      exclusion = validateArr(exclusion, ["excluded", "included"])
       locked = validateArr(locked, ["locked", "unlocked"])
 
       if (typeof rvLow !== "number") rvLow = 0
@@ -59,7 +58,7 @@ export class DisplayArtifactEntry extends DataEntry<"display_artifact", "display
 
       lines = validateArr(lines, [1, 2, 3, 4])
 
-      filterOption = { artSetKeys, rarity, levelLow, levelHigh, slotKeys, mainStatKeys, substats, locations, showEquipped, showInventory, exclusion, locked, rvLow, rvHigh, lines } as FilterOption
+      filterOption = { artSetKeys, rarity, levelLow, levelHigh, slotKeys, mainStatKeys, substats, locations, showEquipped, showInventory, locked, rvLow, rvHigh, lines } as FilterOption
     }
 
     if (typeof ascending !== "boolean") ascending = false

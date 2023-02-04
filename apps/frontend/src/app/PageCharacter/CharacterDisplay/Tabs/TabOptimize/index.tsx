@@ -28,7 +28,7 @@ import useDBMeta from '../../../../ReactHooks/useDBMeta';
 import useForceUpdate from '../../../../ReactHooks/useForceUpdate';
 import useMediaQueryUp from '../../../../ReactHooks/useMediaQueryUp';
 import useTeamData, { getTeamData } from '../../../../ReactHooks/useTeamData';
-import { CharacterKey, charKeyToLocCharKey, LocationCharacterKey } from '../../../../Types/consts';
+import { charKeyToLocCharKey, LocationCharacterKey } from '../../../../Types/consts';
 import { objPathValue, range } from '../../../../Util/Util';
 import { FinalizeResult, Setup, WorkerCommand, WorkerResult } from './BackgroundWorker';
 import { maxBuildsToShowList } from './Build';
@@ -50,6 +50,7 @@ import useBuildResult from './useBuildResult';
 import useBuildSetting from './useBuildSetting';
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import { CharacterKey } from '@genshin-optimizer/consts';
 
 const audio = new Audio("notification.mp3")
 export default function TabBuild() {
@@ -101,7 +102,7 @@ export default function TabBuild() {
   const deferredArtsDirty = useDeferredValue(artsDirty)
   const deferredBuildSetting = useDeferredValue(buildSetting)
   const filteredArts = useMemo(() => {
-    const { mainStatKeys, useExcludedArts, useEquippedArts, levelLow, levelHigh } = deferredArtsDirty && deferredBuildSetting
+    const { mainStatKeys, artExclusion, useEquippedArts, levelLow, levelHigh } = deferredArtsDirty && deferredBuildSetting
     const cantTakeList: Set<LocationCharacterKey> = new Set()
     if (useEquippedArts) {
       const index = equipmentPriority.indexOf(characterKey)
@@ -109,12 +110,11 @@ export default function TabBuild() {
       else equipmentPriority.slice(0, index).forEach(ek => cantTakeList.add(charKeyToLocCharKey(ek)))
     }
     return database.arts.values.filter(art => {
+      if (artExclusion.includes(art.id)) return false
       if (art.level < levelLow) return false
       if (art.level > levelHigh) return false
       const mainStats = mainStatKeys[art.slotKey]
       if (mainStats?.length && !mainStats.includes(art.mainStatKey)) return false
-
-      if (art.exclude && !useExcludedArts) return false
 
       // If its equipped on the selected character, bypass the check
       if (art.location === charKeyToLocCharKey(characterKey)) return true
@@ -418,7 +418,7 @@ export default function TabBuild() {
           <ArtifactSetConfig disabled={generatingBuilds} />
 
           {/* use excluded */}
-          <UseExcluded disabled={generatingBuilds} artsDirty={artsDirty} />
+          <UseExcluded disabled={generatingBuilds} />
 
           {/* use equipped */}
           <UseEquipped disabled={generatingBuilds} filteredArts={filteredArts} />

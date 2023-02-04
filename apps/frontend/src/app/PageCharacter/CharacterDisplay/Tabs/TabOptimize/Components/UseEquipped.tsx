@@ -1,3 +1,4 @@
+import { CharacterKey } from "@genshin-optimizer/consts";
 import { Add, CheckBox, CheckBoxOutlineBlank, Close, KeyboardArrowDown, KeyboardArrowUp, KeyboardDoubleArrowDown, KeyboardDoubleArrowUp, Replay, Settings } from "@mui/icons-material";
 import { Box, Button, ButtonGroup, CardContent, Divider, Grid, Typography } from "@mui/material";
 import React, { Suspense, useCallback, useContext, useEffect, useMemo, useState } from "react";
@@ -18,7 +19,7 @@ import useCharacter from "../../../../../ReactHooks/useCharacter";
 import useCharSelectionCallback from "../../../../../ReactHooks/useCharSelectionCallback";
 import { ICachedArtifact } from "../../../../../Types/artifact";
 import { ICachedCharacter } from "../../../../../Types/character";
-import { CharacterKey, charKeyToLocCharKey } from "../../../../../Types/consts";
+import { charKeyToLocCharKey } from "../../../../../Types/consts";
 import useBuildSetting from "../useBuildSetting";
 const CharacterSelectionModal = React.lazy(() => import('../../../../CharacterSelectionModal'))
 

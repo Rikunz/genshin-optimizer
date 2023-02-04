@@ -10,9 +10,6 @@ export interface IArtifact {
   location: LocationKey,
   lock: boolean,
   substats: ISubstat[],
-
-  // GO-specific
-  exclude: boolean,
 }
 export interface ICachedArtifact extends IArtifact {
   id: string,

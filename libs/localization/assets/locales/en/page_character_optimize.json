@@ -27,7 +27,10 @@
     "usingNum_one": "Using <1>{{count}}</1> excluded artifacts",
     "usingNum_other": "Using <1>{{count}}</1> excluded artifacts",
     "excNum_one": "<1>{{count}}</1> artifact is excluded",
-    "excNum_other": "<1>{{count}}</1> artifacts are excluded"
+    "excNum_other": "<1>{{count}}</1> artifacts are excluded",
+    "addExc": "Exclude artifact from generating builds",
+    "selExc": "Select artifact to exlude from generating builds",
+    "deSelectExc": "Click on artifact cards to remove from exclusion list."
   },
   "useEquipped": {
     "title": "Use Equipped Artifacts",

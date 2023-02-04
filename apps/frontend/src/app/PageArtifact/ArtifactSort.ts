@@ -1,6 +1,7 @@
+import { allSlotKeys, ArtifactSetKey, SlotKey } from "@genshin-optimizer/consts";
 import Artifact from "../Data/Artifacts/Artifact";
 import { allSubstatKeys, ICachedArtifact, MainStatKey, SubstatKey } from "../Types/artifact";
-import { allArtifactRarities, allSlotKeys, ArtifactRarity, ArtifactSetKey, LocationCharacterKey, LocationKey, SlotKey } from "../Types/consts";
+import { allArtifactRarities, ArtifactRarity, LocationCharacterKey } from "../Types/consts";
 import { FilterConfigs, SortConfigs } from "../Util/SortByFilters";
 import { probability } from "./RollProbability";
 export const artifactSortKeys = ["rarity", "level", "artsetkey", "efficiency", "mefficiency", "probability"] as const
@@ -17,7 +18,6 @@ export type FilterOption = {
   locations: LocationCharacterKey[]
   showEquipped: boolean
   showInventory: boolean
-  exclusion: Array<"excluded" | "included">,
   locked: Array<"locked" | "unlocked">,
   rvLow: number,
   rvHigh: number,
@@ -36,7 +36,6 @@ export function initialFilterOption(): FilterOption {
     locations: [],
     showEquipped: true,
     showInventory: true,
-    exclusion: ["excluded", "included"],
     locked: ["locked", "unlocked"],
     rvLow: 0,
     rvHigh: 900,
@@ -61,11 +60,6 @@ export function artifactSortConfigs(effFilterSet: Set<SubstatKey>, probabilityFi
 }
 export function artifactFilterConfigs(effFilterSet: Set<SubstatKey> = new Set(allSubstatKeys)): FilterConfigs<keyof FilterOption, ICachedArtifact> {
   return {
-    exclusion: (art, filter) => {
-      if (!filter.includes("included") && !art.exclude) return false
-      if (!filter.includes("excluded") && art.exclude) return false
-      return true
-    },
     locked: (art, filter) => {
       if (!filter.includes("locked") && art.lock) return false
       if (!filter.includes("unlocked") && !art.lock) return false

@@ -1,10 +1,16 @@
+import { allSlotKeys } from '@genshin-optimizer/consts';
 import { Checkroom, ChevronRight } from '@mui/icons-material';
-import { Button, CardContent, Grid, Skeleton, Typography, Box } from '@mui/material';
+import BlockIcon from '@mui/icons-material/Block';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
+import { Box, Button, CardContent, Grid, Skeleton, Typography } from '@mui/material';
 import { Suspense, useCallback, useContext, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ArtifactCardNano from '../../../../../Components/Artifact/ArtifactCardNano';
+import BootstrapTooltip from '../../../../../Components/BootstrapTooltip';
 import CardDark from '../../../../../Components/Card/CardDark';
 import CardLight from '../../../../../Components/Card/CardLight';
 import StatDisplayComponent from '../../../../../Components/Character/StatDisplayComponent';
+import ColorText from '../../../../../Components/ColoredText';
 import ModalWrapper from '../../../../../Components/ModalWrapper';
 import SqBadge from '../../../../../Components/SqBadge';
 import WeaponCardNano from '../../../../../Components/Weapon/WeaponCardNano';
@@ -14,10 +20,9 @@ import { DatabaseContext } from '../../../../../Database/Database';
 import { uiInput as input } from '../../../../../Formula';
 import ArtifactCard from '../../../../../PageArtifact/ArtifactCard';
 import { ICachedArtifact } from '../../../../../Types/artifact';
-import { allSlotKeys, charKeyToLocCharKey } from '../../../../../Types/consts';
+import { charKeyToLocCharKey } from '../../../../../Types/consts';
 import useBuildSetting from '../useBuildSetting';
 import { ArtifactSetBadges } from './ArtifactSetBadges';
-
 type NewOld = {
   newId: string,
   oldId?: string
@@ -125,12 +130,29 @@ function CompareArtifactModal({ newOld: { newId, oldId }, mainStatAssumptionLeve
   return <ModalWrapper open={!!newId} onClose={onClose} containerProps={{ maxWidth: oldId ? "md" : "xs" }}>
     <CardDark>
       <CardContent sx={{ display: "flex", justifyContent: "center", alignItems: "stretch", gap: 2, height: "100%" }}>
-        {oldId && <Box minWidth={320}><ArtifactCard artifactId={oldId} mainStatAssumptionLevel={mainStatAssumptionLevel} canExclude canEquip editorProps={{ disableSet: true, disableSlot: true }} /></Box>}
+        {oldId && <Box minWidth={320}><ArtifactCard artifactId={oldId} mainStatAssumptionLevel={mainStatAssumptionLevel} canEquip editorProps={{ disableSet: true, disableSlot: true }} extraButtons={<ExcludeButton id={oldId} />} /></Box>}
         {oldId && <Box display="flex" flexGrow={1} />}
         {oldId && <Box display="flex" alignItems="center" justifyContent="center"><Button onClick={onEquip} sx={{ display: "flex" }}><ChevronRight sx={{ fontSize: 40 }} /></Button></Box>}
         {oldId && <Box display="flex" flexGrow={1} />}
-        <Box minWidth={320}><ArtifactCard artifactId={newId} mainStatAssumptionLevel={mainStatAssumptionLevel} canExclude canEquip editorProps={{ disableSet: true, disableSlot: true }} /></Box>
+        <Box minWidth={320}><ArtifactCard artifactId={newId} mainStatAssumptionLevel={mainStatAssumptionLevel} canEquip editorProps={{ disableSet: true, disableSlot: true }} extraButtons={<ExcludeButton id={newId} />} /></Box>
       </CardContent>
     </CardDark>
   </ModalWrapper>
+}
+function ExcludeButton({ id }: { id: string }) {
+  const { t } = useTranslation("artifact")
+  const { character: { key: characterKey } } = useContext(CharacterContext)
+  const { buildSetting: { artExclusion }, buildSettingDispatch } = useBuildSetting(characterKey)
+  const excluded = artExclusion.includes(id)
+  const toggle = useCallback(() => excluded ? buildSettingDispatch({ artExclusion: artExclusion.filter(i => i !== id) }) : buildSettingDispatch({ artExclusion: [...artExclusion, id] }), [id, excluded, artExclusion, buildSettingDispatch])
+
+  return <BootstrapTooltip title={<Box>
+    <Typography>{t`excludeArtifactTip`}</Typography>
+    <Typography><ColorText color={excluded ? "error" : "success"}>{t(`:${excluded ? "excluded" : "included"}`)}</ColorText></Typography>
+  </Box>} placement="top" arrow>
+    <Button onClick={toggle} color={excluded ? "error" : "success"} size="small" >
+      {excluded ? <BlockIcon /> : <ShowChartIcon />}
+    </Button>
+  </BootstrapTooltip>
+
 }

@@ -141,7 +141,7 @@ export function findBestArtifact(rarities: Set<number>, textSetKeys: Set<Artifac
     // setKey: "Adventurer", rarity: 3, level: 0, slotKey: "flower", mainStatKey: "hp", substats: [],
     // TODO: restore
     setKey: "EmblemOfSeveredFate", rarity: 3, level: 0, slotKey: "flower", mainStatKey: "hp", substats: [],
-    location: "", lock: false, exclude: false,
+    location: "", lock: false,
   }]
 
   // Rate each rarity
@@ -186,7 +186,7 @@ export function findBestArtifact(rarities: Set<number>, textSetKeys: Set<Artifac
               if (score > bestScore) bestArtifacts = []
               bestScore = score
               bestArtifacts.push({
-                setKey, rarity, level, slotKey, mainStatKey, substats: [], location: "", lock: false, exclude: false,
+                setKey, rarity, level, slotKey, mainStatKey, substats: [], location: "", lock: false,
               })
             }
           }
@@ -199,7 +199,7 @@ export function findBestArtifact(rarities: Set<number>, textSetKeys: Set<Artifac
             if (score > bestScore) bestArtifacts = []
             bestScore = score
             bestArtifacts.push({
-              setKey, rarity, level, slotKey, mainStatKey, substats: [], location: "", lock: false, exclude: false
+              setKey, rarity, level, slotKey, mainStatKey, substats: [], location: "", lock: false,
             })
           }
         }
